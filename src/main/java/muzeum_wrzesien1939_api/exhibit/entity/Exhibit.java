@@ -24,7 +24,7 @@ public class Exhibit {
     @Column(length = 2000)
     private String description;
 
-    //TODO think weather String or int would be better
+    //TODO think whether String or int would be better
     //String so we can use more of description when exact year unknown (e.g. XIX century)
     private String productionYear;
 
