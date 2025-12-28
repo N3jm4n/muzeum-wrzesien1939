@@ -1,11 +1,11 @@
 package muzeum_wrzesien1939_api.exhibit.entity;
 
 public enum ExhibitCategory {
-    WEAPONRY,
-    MILITARIA,
-    UNIFORMS,
-    DOCUMENTS,
-    PHOTOGRAPHS,
-    EVERYDAY_OBJECTS,
-    OTHER
+    UNIFORMS,           // Umundurowanie
+    EQUIPMENT,          // Wyposażenie
+    WEAPONRY,           // Uzbrojenie
+    DOCUMENTS,          // Dokumenty
+    PHOTOS,             // Fotografie
+    EVERTYDAY_OBJECTS,  // Przedmioty dnia codziennego
+    OTHER               // Inne
 }
