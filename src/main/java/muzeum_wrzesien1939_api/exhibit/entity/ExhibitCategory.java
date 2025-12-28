@@ -6,6 +6,6 @@ public enum ExhibitCategory {
     WEAPONRY,           // Uzbrojenie
     DOCUMENTS,          // Dokumenty
     PHOTOS,             // Fotografie
-    EVERTYDAY_OBJECTS,  // Przedmioty dnia codziennego
+    EVERYDAY_OBJECTS,  // Przedmioty dnia codziennego
     OTHER               // Inne
 }
