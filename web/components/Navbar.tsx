@@ -75,7 +75,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage, onLogout
               <button onClick={() => onNavigate('booking')} className={linkClass('booking')}>Rezerwacje</button>
               <button onClick={() => onNavigate('donate')} className={linkClass('donate')}>Dla Darczyńców</button>
 
-              {user?.role === 'ADMIN' && (
+              {user?.role === 'ROLE_ADMIN' && (
                   <button onClick={() => onNavigate('admin')} className={linkClass('admin')}>Panel Admina</button>
               )}
 
@@ -83,7 +83,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage, onLogout
                   <div className={`flex items-center gap-3 ml-6 pl-6 border-l ${showGlass ? 'border-gray-200' : 'border-white/20'}`}>
                     <div className="flex flex-col items-end">
                       <span className={`text-sm font-bold leading-none ${textClass}`}>{user.firstName} {user.lastName}</span>
-                      <span className={`text-xs ${subTextClass}`}>{user.role === 'ADMIN' ? 'Kustosz' : 'Zwiedzający'}</span>
+                      <span className={`text-xs ${subTextClass}`}>{user.role === 'ROLE_ADMIN' ? 'Kustosz' : 'Zwiedzający'}</span>
                     </div>
                     <button
                         onClick={onLogout}
@@ -122,7 +122,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage, onLogout
               <button onClick={() => handleMobileNavigate('booking')} className="text-gray-900 font-medium text-lg">Rezerwacje</button>
               <button onClick={() => handleMobileNavigate('donate')} className="text-gray-900 font-medium text-lg">Dla Darczyńców</button>
 
-              {user?.role === 'ADMIN' && (
+              {user?.role === 'ROLE_ADMIN' && (
                   <button onClick={() => handleMobileNavigate('admin')} className="text-museum-red font-bold text-lg">Panel Admina</button>
               )}
 

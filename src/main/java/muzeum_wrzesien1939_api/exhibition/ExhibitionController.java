@@ -2,6 +2,7 @@ package muzeum_wrzesien1939_api.exhibition;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import muzeum_wrzesien1939_api.exhibition.service.ExhibitionRequest;
 import muzeum_wrzesien1939_api.exhibition.service.ExhibitionResponse;
@@ -22,12 +23,14 @@ public class ExhibitionController {
 
     @Operation(summary = "Get all exhibitions", description = "Returns list of curated collections.")
     @GetMapping
+    @Transactional
     public ResponseEntity<List<ExhibitionResponse>> getAll() {
         return ResponseEntity.ok(service.getAllExhibitions());
     }
 
     @Operation(summary = "Get exhibition details", description = "Returns exhibition info and all items inside it.")
     @GetMapping("/{id}")
+    @Transactional
     public ResponseEntity<ExhibitionResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getExhibitionById(id));
     }

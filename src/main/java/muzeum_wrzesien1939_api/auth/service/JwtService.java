@@ -24,7 +24,19 @@ public class JwtService {
     private long jwtExpiration;
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> extraClaims = new HashMap<>();
+
+        if (userDetails instanceof muzeum_wrzesien1939_api.user.entity.User customUser) {
+
+            extraClaims.put("role", customUser.getRole().name());
+
+            extraClaims.put("userId", customUser.getId());
+
+            extraClaims.put("firstName", customUser.getFirstName());
+            extraClaims.put("lastName", customUser.getLastName());
+        }
+
+        return generateToken(extraClaims, userDetails);
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {

@@ -1,38 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import { User, UserRole } from './types';
+import { User } from './types';
+import { authService } from './services/authService';
 
 import Home from './pages/Home';
 import Catalog from './pages/Catalog';
 import Exhibitions from './pages/Exhibitions';
+import ExhibitionDetails from './pages/ExhibitionDetails';
 import Booking from './pages/Booking';
 import Donation from './pages/Donation';
 import Admin from './pages/Admin';
+import Login from './pages/Login';
 
-const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState('home');
+const AppContent: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
-  //TODO W przyszłości tutaj podepniemy API: api.post('/auth/login', ...)
-  const handleLogin = (isAdmin: boolean = false) => {
-    setUser({
-      id: 1,
-      email: isAdmin ? 'admin@muzeum.pl' : 'jan@kowalski.pl',
-      firstName: isAdmin ? 'Jan' : 'Jan',
-      lastName: isAdmin ? 'Kustosz' : 'Kowalski',
-      role: isAdmin ? 'ADMIN' : 'USER'
-    });
+  useEffect(() => {
+    const savedUser = authService.getCurrentUser();
+    if (savedUser) {
+      setUser(savedUser);
+    }
+  }, []);
+
+  const handleLogin = (loggedInUser: User) => {
+    setUser(loggedInUser);
+    navigate('/');
   };
 
   const handleLogout = () => {
+    authService.logout();
     setUser(null);
-    setCurrentPage('home');
+    navigate('/');
   };
 
+
   const handleNavigate = (page: string) => {
-    setCurrentPage(page);
+    switch (page) {
+      case 'home': navigate('/'); break;
+      case 'catalog': navigate('/catalog'); break;
+      case 'exhibitions': navigate('/exhibitions'); break;
+      case 'booking': navigate('/booking'); break;
+      case 'donate': navigate('/donate'); break;
+      case 'admin': navigate('/admin'); break;
+      case 'login': navigate('/login'); break;
+      default: navigate('/');
+    }
     window.scrollTo(0, 0);
+  };
+
+  const getCurrentPageKey = () => {
+    const path = window.location.pathname;
+    if (path === '/') return 'home';
+    if (path.startsWith('/catalog')) return 'catalog';
+    if (path.startsWith('/exhibitions')) return 'exhibitions';
+    if (path.startsWith('/booking')) return 'booking';
+    if (path.startsWith('/donate')) return 'donate';
+    if (path.startsWith('/admin')) return 'admin';
+    if (path.startsWith('/login')) return 'login';
+    return 'home';
   };
 
   return (
@@ -40,53 +68,37 @@ const App: React.FC = () => {
         <Navbar
             user={user}
             onNavigate={handleNavigate}
-            currentPage={currentPage}
+            currentPage={getCurrentPageKey()}
             onLogout={handleLogout}
         />
 
         <main className="flex-grow">
-          {currentPage === 'home' && <Home onNavigate={handleNavigate} />}
-          {currentPage === 'catalog' && <Catalog user={user} />}
-          {currentPage === 'exhibitions' && <Exhibitions />}
-          {currentPage === 'booking' && <Booking user={user} onNavigate={handleNavigate} />}
-          {currentPage === 'donate' && <Donation user={user} onNavigate={handleNavigate} />}
-          {currentPage === 'admin' && <Admin user={user} />}
+          <Routes>
+            <Route path="/" element={<Home onNavigate={handleNavigate} />} />
+            <Route path="/catalog" element={<Catalog user={user} />} />
 
-          {currentPage === 'login' && (
-              <div className="pt-32 flex justify-center pb-20 px-4">
-                <div className="bg-white p-8 rounded-3xl shadow-lg text-center max-w-md w-full border border-gray-100">
-                  <h2 className="text-3xl font-serif font-bold mb-2">Witaj w Muzeum</h2>
-                  <p className="text-gray-500 mb-8">Wybierz tryb logowania (Symulacja)</p>
+            <Route path="/exhibitions" element={<Exhibitions />} />
+            <Route path="/exhibitions/:id" element={<ExhibitionDetails />} />
 
-                  <div className="space-y-4">
-                    <button
-                        onClick={() => { handleLogin(false); handleNavigate('home'); }}
-                        className="w-full bg-museum-black text-white px-8 py-4 rounded-xl font-medium hover:bg-gray-800 transition shadow-lg"
-                    >
-                      Zaloguj jako Użytkownik
-                    </button>
+            <Route path="/booking" element={<Booking user={user} onNavigate={handleNavigate} />} />
+            <Route path="/donate" element={<Donation user={user} onNavigate={handleNavigate} />} />
+            <Route path="/admin" element={<Admin user={user} />} />
+            <Route path="/login" element={<Login onLogin={handleLogin} onNavigate={handleNavigate} />} />
 
-                    <button
-                        onClick={() => { handleLogin(true); handleNavigate('admin'); }}
-                        className="w-full bg-white border-2 border-museum-red text-museum-red px-8 py-4 rounded-xl font-medium hover:bg-red-50 transition"
-                    >
-                      Zaloguj jako Administrator
-                    </button>
-                  </div>
-
-                  <button
-                      onClick={() => handleNavigate('home')}
-                      className="mt-8 text-sm text-gray-400 hover:text-gray-600 underline"
-                  >
-                    Wróć do strony głównej bez logowania
-                  </button>
-                </div>
-              </div>
-          )}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
         </main>
 
-        {currentPage !== 'login' && <Footer />}
+        {window.location.pathname !== '/login' && <Footer />}
       </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+      <Router>
+        <AppContent />
+      </Router>
   );
 };
 

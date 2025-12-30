@@ -9,7 +9,7 @@ export type ExhibitCategory =
 
 export type DonationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
 
-export type UserRole = 'USER' | 'ADMIN';
+export type UserRole = 'ROLE_USER' | 'ROLE_ADMIN';
 
 
 export interface Exhibit {
@@ -71,4 +71,16 @@ export interface DonationRequest {
   itemName: string;
   description: string;
   imageUrl: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }

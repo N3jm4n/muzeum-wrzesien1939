@@ -28,6 +28,9 @@ public class Exhibit {
     //String so we can use more of description when exact year unknown (e.g. XIX century)
     private String productionYear;
 
+    //TODO get rid of lob, maybe use binary image data
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
