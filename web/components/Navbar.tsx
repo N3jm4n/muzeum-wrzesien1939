@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Landmark, LogOut, User as UserIcon } from 'lucide-react';
 import { User } from '../types';
+// @ts-ignore
+import logoImage from '../assets/logo_no_bg_cropped.png';
 
 interface NavbarProps {
   user: User | null;
@@ -56,16 +58,14 @@ const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage, onLogout
 
             {/* Logo */}
             <div
-                className="flex items-center gap-3 cursor-pointer group"
+                className="flex items-center cursor-pointer transition-opacity hover:opacity-80"
                 onClick={() => onNavigate('home')}
             >
-              <div className={`p-2 rounded-xl transition-colors ${iconBgClass} shadow-lg`}>
-                <Landmark className="h-6 w-6" />
-              </div>
-              <div className="flex flex-col">
-                <span className={`font-serif font-bold text-lg leading-none tracking-wide transition-colors ${textClass}`}>MUZEUM</span>
-                <span className={`text-[10px] uppercase tracking-[0.25em] font-medium transition-colors ${subTextClass}`}>Września 1939</span>
-              </div>
+              <img
+                  src={logoImage}
+                  alt="Muzeum Września 1939"
+                  className="h-14 w-auto object-contain"
+              />
             </div>
 
             <div className="hidden lg:flex items-center space-x-1">
