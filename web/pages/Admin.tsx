@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Shield } from 'lucide-react';
 import { User } from '../types';
 import { AdminDonations } from '../components/admin/AdminDonations';
-import { AdminExhibitForm } from '../components/admin/AdminExhibitForm';
+import { AdminExhibitManager } from '../components/admin/AdminExhibitManager.tsx';
 import { AdminExhibitionsManager } from '../components/admin/AdminExhibitionsManager';
 import { AdminReservations } from '../components/admin/AdminReservations';
 
@@ -45,7 +45,7 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
                 {/* CONTENT */}
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 md:p-8 min-h-[500px]">
                     {activeTab === 'donations' && <AdminDonations />}
-                    {activeTab === 'addExhibit' && <AdminExhibitForm />}
+                    {activeTab === 'addExhibit' && <AdminExhibitManager />}
                     {activeTab === 'addExhibition' && <AdminExhibitionsManager />}
                     {activeTab === 'reservations' && <AdminReservations />}
                 </div>

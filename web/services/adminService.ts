@@ -1,5 +1,5 @@
 import api from './api';
-import { Donation, Exhibit, Exhibition } from '../types';
+import { Donation, Exhibit, ExhibitCategory, Exhibition } from '../types';
 
 interface CreateExhibitRequest {
     name: string;
@@ -34,6 +34,15 @@ export const adminService = {
     addExhibit: async (data: CreateExhibitRequest) => {
         const response = await api.post<Exhibit>('/exhibits', data);
         return response.data;
+    },
+
+    updateExhibit: async (id: number, exhibitData: any) => {
+        const response = await api.put<Exhibit>(`/exhibits/${id}`, exhibitData);
+        return response.data;
+    },
+
+    deleteExhibit: async (id: number) => {
+        await api.delete(`/exhibits/${id}`);
     },
 
     getAllExhibits: async () => {
