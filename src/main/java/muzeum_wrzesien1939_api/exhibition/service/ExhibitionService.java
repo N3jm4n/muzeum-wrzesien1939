@@ -7,6 +7,7 @@ import muzeum_wrzesien1939_api.exhibit.service.ExhibitResponse;
 import muzeum_wrzesien1939_api.exhibition.entity.Exhibition;
 import muzeum_wrzesien1939_api.exhibition.repository.ExhibitionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +43,35 @@ public class ExhibitionService {
                 .build();
 
         return mapToResponse(exhibitionRepository.save(exhibition));
+    }
+
+    @Transactional
+    public ExhibitionResponse updateExhibition(Long id, ExhibitionRequest request) {
+        Exhibition exhibition = exhibitionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Exhibition not found"));
+
+        exhibition.setName(request.getName());
+        exhibition.setDescription(request.getDescription());
+
+        if (request.getBackgroundImageUrl() != null && !request.getBackgroundImageUrl().isEmpty()) {
+            exhibition.setBackgroundImageUrl(request.getBackgroundImageUrl());
+        }
+
+        if (request.getExhibitIds() != null) {
+            List<Exhibit> newExhibits = exhibitRepository.findAllById(request.getExhibitIds());
+            exhibition.setExhibits(newExhibits);
+        }
+
+        return mapToResponse(exhibitionRepository.save(exhibition));
+    }
+
+    @Transactional
+    public void deleteExhibition(Long id) {
+        if (!exhibitionRepository.existsById(id)) {
+            throw new RuntimeException("Exhibition not found");
+        }
+
+        exhibitionRepository.deleteById(id);
     }
 
     private ExhibitionResponse mapToResponse(Exhibition exhibition) {

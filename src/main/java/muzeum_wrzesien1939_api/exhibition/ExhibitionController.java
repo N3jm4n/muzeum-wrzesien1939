@@ -41,4 +41,22 @@ public class ExhibitionController {
     public ResponseEntity<ExhibitionResponse> create(@RequestBody ExhibitionRequest request) {
         return ResponseEntity.ok(service.createExhibition(request));
     }
+
+    @Operation(summary = "Update exhibition", description = "Admin updates exhibition details and assigned exhibits.")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<ExhibitionResponse> update(
+            @PathVariable Long id,
+            @RequestBody ExhibitionRequest request
+    ) {
+        return ResponseEntity.ok(service.updateExhibition(id, request));
+    }
+
+    @Operation(summary = "Delete exhibition", description = "Admin removes an exhibition (exhibits remain in database).")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.deleteExhibition(id);
+        return ResponseEntity.noContent().build();
+    }
 }

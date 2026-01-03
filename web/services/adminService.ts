@@ -45,5 +45,19 @@ export const adminService = {
     addExhibition: async (data: CreateExhibitionRequest) => {
         const response = await api.post<Exhibition>('/exhibitions', data);
         return response.data;
+    },
+
+    updateExhibition: async (id: number, data: any) => {
+        const response = await api.put(`/exhibitions/${id}`, data);
+        return response.data;
+    },
+
+    deleteExhibition: async (id: number) => {
+        await api.delete(`/exhibitions/${id}`);
+    },
+
+    getAllExhibitions: async () => {
+        const response = await api.get('/exhibitions');
+        return response.data;
     }
 };
