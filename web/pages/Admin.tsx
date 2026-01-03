@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Gift, Plus, Image, Save, Check, X, CheckCircle, UploadCloud, Search, Loader } from 'lucide-react';
+import { Shield, Gift, Plus, Image, Save, Check, X, CheckCircle, UploadCloud, Search, Loader, Calendar, Users } from 'lucide-react';
 import { User, Donation, Exhibit, ExhibitCategory } from '../types';
 import { adminService } from '../services/adminService';
+import { bookingService } from '../services/bookingService'; // Upewnij się, że ścieżka jest poprawna
 import imageCompression from 'browser-image-compression';
 
 interface AdminProps {
@@ -9,7 +10,7 @@ interface AdminProps {
 }
 
 const Admin: React.FC<AdminProps> = ({ user }) => {
-    const [activeTab, setActiveTab] = useState<'donations' | 'addExhibit' | 'addExhibition'>('donations');
+    const [activeTab, setActiveTab] = useState<'donations' | 'addExhibit' | 'addExhibition' | 'reservations'>('donations');
 
     const [pendingDonations, setPendingDonations] = useState<Donation[]>([]);
     const [availableExhibits, setAvailableExhibits] = useState<Exhibit[]>([]);
@@ -17,6 +18,10 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [successMsg, setSuccessMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+    const [dailyReservations, setDailyReservations] = useState<any[]>([]);
+    const [loadingReservations, setLoadingReservations] = useState(false);
 
     const [exhibitForm, setExhibitForm] = useState({
         name: '',
@@ -58,6 +63,23 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
         }
     }, [activeTab, user]);
 
+    useEffect(() => {
+        if (activeTab === 'reservations') {
+            const fetchReservations = async () => {
+                setLoadingReservations(true);
+                try {
+                    const data = await bookingService.getByDate(selectedDate);
+                    const sorted = data.sort((a, b) => a.visitTime.localeCompare(b.visitTime));
+                    setDailyReservations(sorted);
+                } catch (error) {
+                    console.error("Błąd pobierania rezerwacji:", error);
+                } finally {
+                    setLoadingReservations(false);
+                }
+            };
+            fetchReservations();
+        }
+    }, [selectedDate, activeTab]);
 
     const showSuccess = (msg: string) => {
         setSuccessMsg(msg);
@@ -114,7 +136,6 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
         });
     };
 
-
     const handleDonationDecision = async (id: number, decision: 'ACCEPTED' | 'REJECTED') => {
         try {
             await adminService.updateDonationStatus(id, decision);
@@ -162,6 +183,7 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
         ex.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const totalGuests = dailyReservations.reduce((sum, r) => sum + r.numberOfGuests, 0);
 
     if (!user || user.role !== 'ROLE_ADMIN') {
         return (
@@ -217,12 +239,18 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
                     >
                         Utwórz Wystawę
                     </button>
+                    <button
+                        onClick={() => setActiveTab('reservations')}
+                        className={`px-6 py-3 font-medium rounded-t-xl transition-all ${activeTab === 'reservations' ? 'bg-white text-museum-red border-b-2 border-museum-red shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
+                    >
+                        Rezerwacje
+                    </button>
                 </div>
 
                 {/* CONTENT AREA */}
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 md:p-8 min-h-[500px]">
 
-                    {/* TAB 1 */}
+                    {/* TAB 1: DONATIONS */}
                     {activeTab === 'donations' && (
                         <div>
                             <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
@@ -262,7 +290,7 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
                         </div>
                     )}
 
-                    {/*TAB 2*/}
+                    {/* TAB 2: ADD EXHIBIT */}
                     {activeTab === 'addExhibit' && (
                         <form onSubmit={handleAddExhibit} className="max-w-3xl mx-auto">
                             <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
@@ -322,7 +350,7 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
                         </form>
                     )}
 
-                    {/*TAB 3*/}
+                    {/* TAB 3: CREATE EXHIBITION */}
                     {activeTab === 'addExhibition' && (
                         <form onSubmit={handleAddExhibition} className="max-w-5xl mx-auto">
                             <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
@@ -428,6 +456,88 @@ const Admin: React.FC<AdminProps> = ({ user }) => {
                                 </button>
                             </div>
                         </form>
+                    )}
+
+                    {/* TAB 4: RESERVATIONS */}
+                    {activeTab === 'reservations' && (
+                        <div className="animate-fade-in space-y-8">
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                                <div>
+                                    <h2 className="text-2xl font-bold text-gray-900">Harmonogram Wizyt</h2>
+                                    <p className="text-gray-500">Sprawdź listę gości na wybrany dzień.</p>
+                                </div>
+
+                                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-gray-200 shadow-sm">
+                                    <Calendar size={20} className="text-museum-red" />
+                                    <input
+                                        type="date"
+                                        value={selectedDate}
+                                        onChange={(e) => setSelectedDate(e.target.value)}
+                                        className="bg-transparent outline-none font-bold text-gray-700"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className="h-16 w-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center">
+                                        <Users size={32} />
+                                    </div>
+                                    <div>
+                                        <div className="text-sm text-gray-500 font-bold uppercase tracking-wider">Łącznie osób tego dnia</div>
+                                        <div className="text-3xl font-bold text-gray-900">{totalGuests}</div>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-sm text-gray-400">Liczba grup/rezerwacji</div>
+                                    <div className="text-xl font-bold text-gray-700">{dailyReservations.length}</div>
+                                </div>
+                            </div>
+
+                            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                                {loadingReservations ? (
+                                    <div className="p-12 text-center text-gray-400 flex justify-center"><Loader className="animate-spin" /></div>
+                                ) : dailyReservations.length > 0 ? (
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left">
+                                            <thead className="bg-gray-50 border-b border-gray-100">
+                                            <tr>
+                                                <th className="p-6 text-xs font-bold text-gray-500 uppercase">Godzina</th>
+                                                <th className="p-6 text-xs font-bold text-gray-500 uppercase">Gość</th>
+                                                <th className="p-6 text-xs font-bold text-gray-500 uppercase">Email</th>
+                                                <th className="p-6 text-xs font-bold text-gray-500 uppercase text-center">Liczba osób</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-100">
+                                            {dailyReservations.map((res) => (
+                                                <tr key={res.id} className="hover:bg-gray-50 transition">
+                                                    <td className="p-6 font-bold text-museum-red whitespace-nowrap">
+                                                        {res.visitTime.slice(0, 5)}
+                                                    </td>
+                                                    <td className="p-6 font-medium text-gray-900">
+                                                        {res.firstName} {res.lastName}
+                                                    </td>
+                                                    <td className="p-6 text-gray-500 text-sm">
+                                                        {res.userEmail}
+                                                    </td>
+                                                    <td className="p-6 text-center">
+                                                      <span className="inline-block px-3 py-1 bg-gray-100 rounded-full font-bold text-sm text-gray-700">
+                                                        {res.numberOfGuests}
+                                                      </span>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                ) : (
+                                    <div className="p-12 text-center flex flex-col items-center justify-center text-gray-400">
+                                        <Calendar size={48} className="mb-4 opacity-20"/>
+                                        <p>Brak rezerwacji na ten dzień.</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     )}
 
                 </div>
