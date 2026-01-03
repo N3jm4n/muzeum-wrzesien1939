@@ -161,7 +161,7 @@ export const AdminDonations: React.FC = () => {
     return (
         <div className="pb-12">
 
-            {/* --- SECTION 1: PENDING --- */}
+            {/* SECTION 1: PENDING */}
             <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold flex items-center gap-2">
                     <Gift className="text-gray-400" /> Pending Requests
@@ -180,7 +180,7 @@ export const AdminDonations: React.FC = () => {
                 )}
             </div>
 
-            {/* --- SECTION 2: ACCEPTED HISTORY --- */}
+            {/* SECTION 2: ACCEPTED HISTORY */}
             <div className="flex items-center gap-4 mb-6 pt-8 border-t border-gray-200">
                 <h3 className="text-xl font-bold flex items-center gap-2 text-gray-700">
                     <Archive className="text-gray-400" /> Accepted History
