@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Landmark, LogOut, User as UserIcon } from 'lucide-react';
+import { Menu, X, LogOut, User as UserIcon } from 'lucide-react';
 import { User } from '../types';
 // @ts-ignore
 import logoImage from '../assets/logo_no_bg_cropped.png';
@@ -34,8 +34,6 @@ const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage, onLogout
 
   const textClass = showGlass ? 'text-gray-900' : 'text-white';
   const subTextClass = showGlass ? 'text-gray-600' : 'text-gray-300';
-  const iconBgClass = showGlass ? 'bg-museum-red text-white' : 'bg-white/10 text-white';
-
   const linkClass = (page: string) => `
     cursor-pointer text-sm font-medium transition-all duration-300 px-4 py-2 rounded-full
     ${currentPage === page
