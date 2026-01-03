@@ -2,7 +2,6 @@ package muzeum_wrzesien1939_api.donation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import muzeum_wrzesien1939_api.donation.entity.DonationStatus;
 import muzeum_wrzesien1939_api.donation.service.DonationRequest;
@@ -30,7 +29,6 @@ public class DonationController {
 
     @Operation(summary = "Get my donations", description = "Returns history of user's submissions.")
     @GetMapping("/my")
-    @Transactional
     public ResponseEntity<List<DonationResponse>> getMyDonations() {
         return ResponseEntity.ok(service.getMyDonations());
     }

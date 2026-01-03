@@ -28,8 +28,7 @@ public class Donation {
     @Column(length = 2000)
     private String description;
 
-    //TODO get rid of lob, maybe use binary image data
-    @Lob
+    //TODO maybe use binary image data
     @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
