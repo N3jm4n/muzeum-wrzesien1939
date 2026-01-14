@@ -35,28 +35,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
 
-        // 1. Sprawdzamy, czy nagłówek istnieje i czy zaczyna się od "Bearer "
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 2. Wyciągamy sam token (ucinamy "Bearer ")
         jwt = authHeader.substring(7);
 
-        // 3. Wyciągamy email z tokena
         userEmail = jwtService.extractUsername(jwt);
 
-        // 4. Jeśli mamy email, a użytkownik nie jest jeszcze zalogowany w kontekście Springa:
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            // Pobieramy dane użytkownika z bazy
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-            // 5. Sprawdzamy czy token jest ważny
             if (jwtService.isTokenValid(jwt, userDetails)) {
 
-                // Tworzymy obiekt autoryzacji
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -67,12 +60,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
 
-                // 6. Ustawiamy użytkownika jako "Zalogowany" w kontekście Security
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
-        // Przekazujemy żądanie dalej (do kontrolerów)
         filterChain.doFilter(request, response);
     }
 }

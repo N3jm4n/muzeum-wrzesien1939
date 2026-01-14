@@ -5,7 +5,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import muzeum_wrzesien1939_api.exhibit.service.ExhibitRequest;
 import muzeum_wrzesien1939_api.exhibit.service.ExhibitResponse;
+import muzeum_wrzesien1939_api.exhibit.service.ExhibitSearchCriteria;
 import muzeum_wrzesien1939_api.exhibit.service.ExhibitService;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +22,12 @@ public class ExhibitController {
 
     private final ExhibitService service;
 
-    @Operation(summary = "Get all exhibits", description = "Returns a list of all exhibits in the museum database.")
+    @Operation(summary = "Get all exhibits", description = "Returns a list of all exhibits with optional filtering (Query Object Pattern).")
     @GetMapping
-    public ResponseEntity<List<ExhibitResponse>> getAllExhibits() {
-        return ResponseEntity.ok(service.getAllExhibits());
+    public ResponseEntity<List<ExhibitResponse>> getAllExhibits(
+            @ParameterObject @ModelAttribute ExhibitSearchCriteria criteria
+    ) {
+        return ResponseEntity.ok(service.getAllExhibits(criteria));
     }
 
     @Operation(summary = "Create a new exhibit", description = "Adds a new exhibit to the database (ADMIN only).")

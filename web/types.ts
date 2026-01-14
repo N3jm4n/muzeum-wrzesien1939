@@ -84,3 +84,9 @@ export interface RegisterRequest {
   email: string;
   password: string;
 }
+
+export interface ExhibitSearchCriteria {
+  name?: string;
+  category?: ExhibitCategory;
+  productionYear?: number;
+}

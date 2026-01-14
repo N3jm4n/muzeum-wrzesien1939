@@ -1,8 +1,6 @@
 package muzeum_wrzesien1939_api.exhibit.service;
 
 import lombok.RequiredArgsConstructor;
-import muzeum_wrzesien1939_api.exhibit.service.ExhibitRequest;
-import muzeum_wrzesien1939_api.exhibit.service.ExhibitResponse;
 import muzeum_wrzesien1939_api.exhibit.entity.Exhibit;
 import muzeum_wrzesien1939_api.exhibit.repository.ExhibitRepository;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,30 @@ import java.util.stream.Collectors;
 public class ExhibitService {
 
     private final ExhibitRepository repository;
+
+    public List<ExhibitResponse> getAllExhibits(ExhibitSearchCriteria criteria) {
+        return repository.findAll()
+                .stream()
+                .filter(exhibit -> matches(exhibit, criteria))
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    private boolean matches(Exhibit exhibit, ExhibitSearchCriteria criteria) {
+        if (criteria == null) return true;
+
+        boolean nameMatches = criteria.getName() == null ||
+                exhibit.getName().toLowerCase().contains(criteria.getName().toLowerCase());
+
+        boolean categoryMatches = criteria.getCategory() == null ||
+                (exhibit.getCategory() != null &&
+                        exhibit.getCategory().name().equalsIgnoreCase(criteria.getCategory()));
+
+        boolean yearMatches = criteria.getProductionYear() == null ||
+                String.valueOf(criteria.getProductionYear()).equals(exhibit.getProductionYear());
+
+        return nameMatches && categoryMatches && yearMatches;
+    }
 
     public ExhibitResponse createExhibit(ExhibitRequest request) {
         var exhibit = Exhibit.builder()
@@ -30,16 +52,9 @@ public class ExhibitService {
         return mapToResponse(savedExhibit);
     }
 
-    public List<ExhibitResponse> getAllExhibits() {
-        return repository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
     public ExhibitResponse getExhibitById(Long id) {
         var exhibit = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Exhibit not found"));//TODO maybe nicer exception
+                .orElseThrow(() -> new RuntimeException("Exhibit not found"));
         return mapToResponse(exhibit);
     }
 
