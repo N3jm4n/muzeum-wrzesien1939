@@ -22,6 +22,24 @@ A robust Full-Stack application designed for modern museum administration. The s
 
 ---
 
+## 📊 Business Analysis & System Design
+
+This project goes beyond just code. It includes comprehensive business and system analysis documentation, demonstrating a clear understanding of user flows and system architecture.
+
+### 1. Business Process Modeling (BPMN 2.0)
+The system logic is documented using BPMN standards to handle complex interactions:
+* **![Ticket Reservation Process](docs/images/ticket-reservation-bpmn.png):** Features parallel gateways (AND) for database/profile synchronization and Event Sub-processes (Timers) for handling 15-minute session timeouts.
+* **![Artifact Donation Workflow](docs/images/artifact-donation-bpmn.png):** Illustrates a multi-lane back-office approval process between Donors, the System, and Museum Administrators.
+
+### 2. Agile Requirements (Jira & Scrum)
+The development was driven by a well-structured Agile Backlog:
+* Structured into **Epics** (e.g., *Digital Artifact Catalog, Donor Portal, CMS*).
+* Detailed **User Stories** written in **BDD format** (`Given / When / Then`) ensuring clear Acceptance Criteria.
+* 📸 *View Jira Backlog ![Jira Backlog Snapshot](./docs/images/jira-board-snapshot.png)*
+* 🔗 **Live Jira Board:** *Available upon request during the interview.*
+
+---
+
 ## ⚙️ Configuration & Environment Variables
 
 To run this project securely, the following environment variables need to be configured. The application uses `application.properties` to map these variables.

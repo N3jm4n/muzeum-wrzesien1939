@@ -1,140 +1,106 @@
-# Architektura i Wzorce Projektowe
+# Architecture and Design Patterns
 
-Poniższa sekcja opisuje wzorce projektowe zaimplementowane w systemie, z podziałem na warstwy architektoniczne oraz kategorie funkcjonalne.
+The following section describes the design patterns implemented within the system, categorized by architectural layers and functional domains.
 
-## 1. Wzorce Prezentacji Internetowych (Web Presentation Patterns)
+## 1. Web Presentation Patterns
 
-### Model View Controller (MVC)
+### Model-View-Controller (MVC)
+* **Classes:** `ExhibitController`, `AuthController`, `ExhibitService` (Model), React Application (View).
+* **Justification:** The fundamental architectural pattern of Spring Web MVC. It separates business logic and data (Backend/Model) from the presentation layer (Frontend/View) and request routing (Controller).
+* **Benefits:**
+  * **Independent Development:** The frontend team (React) and backend team (Java) can work in parallel, needing only to agree on the API contract.
+  * **Maintainability:** Changing the view technology (e.g., migrating from React to Angular) does not require any modifications to the server-side business logic.
 
-* **Klasy:** `ExhibitController`, `AuthController`, `ExhibitService` (Model), Aplikacja React (View).
-* **Uzasadnienie:** Fundamentalny wzorzec architektury Spring Web MVC. Separuje logikę biznesową i dane (Backend/Model) od warstwy prezentacji (Frontend/View) oraz sterowania przepływem (Controller).
-* **Korzyści:**
-  * **Niezależność rozwoju:** Zespół frontendowy (React) i backendowy (Java) mogą pracować równolegle, uzgadniając jedynie kontrakt API.
-  * **Łatwiejsze utrzymanie:** Zmiana technologii widoku (np. z React na Angular) nie wymaga ingerencji w logikę biznesową po stronie serwera.
-
-
-
-### Record Set (Zbiór Rekordów)
-
-* **Klasy:** `Catalog.tsx` (React Component), `exhibitService.ts`, obiekt stanu `allExhibits`.
-* **Uzasadnienie:** Aplikacja pobiera pełną listę eksponatów z API i przechowuje ją w pamięci przeglądarki jako zbiór danych. Operacje filtrowania i sortowania wykonywane są bezpośrednio na tym zbiorze po stronie klienta (Client-Side).
-* **Korzyści:**
-  * **Wydajność interfejsu (Zero Latency):** Filtrowanie i sortowanie odbywa się natychmiastowo, bez opóźnień sieciowych, co poprawia User Experience (UX).
-  * **Redukcja obciążenia serwera:** Zamiast wysyłać zapytanie do bazy przy każdym kliknięciu filtra, serwer obsługuje tylko jedno żądanie pobrania danych na sesję.
-
-
+### Record Set
+* **Classes:** `Catalog.tsx` (React Component), `exhibitService.ts`, state object `allExhibits`.
+* **Justification:** The application fetches the complete list of exhibits from the API and stores it in the browser's memory as a dataset. Filtering and sorting operations are executed directly on this set on the Client-Side.
+* **Benefits:**
+  * **UI Performance (Zero Latency):** Filtering and sorting occur instantly without network delays, significantly enhancing User Experience (UX).
+  * **Reduced Server Load:** Instead of querying the database on every filter click, the server handles only one initial data fetch request per session.
 
 ---
 
-## 2. Wzorce Logiki Dziedziny (Domain Logic Patterns)
+## 2. Domain Logic Patterns
 
-### Service Layer (Warstwa Usług)
+### Service Layer
+* **Classes:** `ExhibitService`, `ReservationService`, `AuthService`.
+* **Justification:** A dedicated service layer defines the application's boundary and its set of available operations. It acts as a mediator between controllers and the data access layer.
+* **Benefits:**
+  * **Centralized Logic:** Business rules (e.g., verifying time slot availability) are encapsulated in one place rather than scattered across controllers.
+  * **Reusability:** The same service method can be invoked by a REST controller, a background task (Scheduler), or another service.
 
-* **Klasy:** `ExhibitService`, `ReservationService`, `AuthService`.
-* **Uzasadnienie:** Wydzielona warstwa usług definiuje granicę aplikacji i zestaw dostępnych operacji. Pośredniczy ona między kontrolerami a warstwą danych.
-* **Korzyści:**
-  * **Centralizacja logiki:** Reguły biznesowe (np. walidacja dostępności terminu) znajdują się w jednym miejscu, a nie są rozrzucone po kontrolerach.
-  * **Reużywalność:** Tę samą metodę serwisu może wywołać kontroler REST, zadanie w tle (Scheduler) lub inny serwis.
+### Domain Model
+* **Classes:** `Exhibit`, `User`, `Reservation`, `Exhibition`.
+* **Justification:** Entities in the system are not merely data containers; they represent real business objects and the relationships between them.
+* **Benefits:**
+  * **Code Comprehensibility:** The code reflects real-world business terminology (Ubiquitous Language), making it easier to communicate and understand system behaviors.
+  * **Encapsulation:** The model ensures its own data consistency (e.g., through validation in setters or constructors).
 
-
-
-### Domain Model (Model Domeny)
-
-* **Klasy:** `Exhibit`, `User`, `Reservation`, `Exhibition`.
-* **Uzasadnienie:** Encje w systemie nie są jedynie kontenerami na dane, lecz reprezentują realne obiekty biznesowe oraz relacje między nimi.
-* **Korzyści:**
-  * **Zrozumiałość kodu:** Kod odzwierciedla rzeczywisty język biznesowy (Ubiquitous Language), co ułatwia komunikację i zrozumienie zasad działania systemu.
-  * **Enkapsulacja:** Model dba o spójność swoich danych (np. poprzez walidację w setterach lub konstruktorach).
-
-
-
-### Transaction Script (Skrypt Transakcyjny)
-
-* **Klasy:** `ReservationService` (metoda `makeReservation`).
-* **Uzasadnienie:** Metoda tworzenia rezerwacji realizuje ten wzorzec poprzez wykonanie proceduralnego ciągu kroków niezbędnych do sfinalizowania operacji biznesowej (sprawdzenie dostępności -> pobranie usera -> zapis).
-* **Korzyści:**
-  * **Prostota:** Idealny dla operacji o niskiej i średniej złożoności – kod jest liniowy, łatwy do napisania i prześledzenia "krok po kroku".
-  * **Szybkość implementacji:** Nie wymaga tworzenia skomplikowanych struktur obiektowych dla prostych operacji CRUD.
-
-
+### Transaction Script
+* **Classes:** `ReservationService` (`makeReservation` method).
+* **Justification:** The reservation creation method implements this pattern by executing a procedural sequence of steps required to finalize a business transaction (check availability -> fetch user -> save).
+* **Benefits:**
+  * **Simplicity:** Ideal for operations of low to medium complexity—the code is linear, easy to write, and simple to debug step-by-step.
+  * **Speed of Implementation:** Avoids the overhead of creating complex object structures for standard CRUD operations.
 
 ---
 
-## 3. Wzorce Architektury Źródła Danych (Data Source Architecture Patterns)
+## 3. Data Source Architecture Patterns
 
-### Repository (Repozytorium)
-
-* **Klasy:** `ExhibitRepository`, `UserRepository`, `ReservationRepository`.
-* **Uzasadnienie:** Interfejsy te ukrywają szczegóły techniczne dostępu do źródła danych, emulując kolekcję obiektów w pamięci.
-* **Korzyści:**
-  * **Testowalność:** Umożliwia łatwe "mockowanie" warstwy danych w testach jednostkowych serwisów (nie trzeba stawiać prawdziwej bazy danych do testów).
-  * **Czystość kodu:** Warstwa biznesowa nie zawiera kodu SQL ani szczegółów połączenia z bazą.
-
-
+### Repository
+* **Classes:** `ExhibitRepository`, `UserRepository`, `ReservationRepository`.
+* **Justification:** These interfaces hide the technical details of data access, emulating an in-memory collection of objects.
+* **Benefits:**
+  * **Testability:** Allows for easy mocking of the data layer in unit tests for services (no need to spin up a real database for testing).
+  * **Clean Architecture:** The business layer remains completely agnostic of SQL queries or database connection details.
 
 ### Data Mapper
-
-* **Klasy:** Hibernate (implementacja JPA używana przez Spring Data).
-* **Uzasadnienie:** Wzorzec ten separuje obiekty w pamięci (Encje) od fizycznej struktury relacyjnej bazy danych, tłumacząc operacje obiektowe na SQL.
-* **Korzyści:**
-  * **Niezależność od bazy danych:** Aplikacja może łatwo zmienić silnik bazy danych (np. z PostgreSQL na MySQL) bez konieczności przepisywania zapytań SQL w kodzie.
-  * **Produktywność:** Programista skupia się na logice Java, a nie na ręcznym mapowaniu kolumn `ResultSet` na pola obiektów.
-
-
+* **Classes:** Hibernate (JPA implementation used by Spring Data).
+* **Justification:** This pattern separates in-memory objects (Entities) from the physical relational database structure, translating object-oriented operations into SQL.
+* **Benefits:**
+  * **Database Independence:** The application can easily switch database engines (e.g., from PostgreSQL to MySQL) without rewriting raw SQL queries in the codebase.
+  * **Developer Productivity:** Developers can focus on Java logic rather than manually mapping `ResultSet` columns to object fields.
 
 ---
 
-## 4. Wzorce Odwzorowań Obiektów i Metadanych
+## 4. Object and Metadata Mapping Patterns
 
-### Query Object (Obiekt Zapytania)
-
-* **Klasy:** `ExhibitSearchCriteria`, `ExhibitController`, `ExhibitService`.
-* **Uzasadnienie:** Zamiast przekazywać wiele pojedynczych parametrów do metod serwisu, kryteria wyszukiwania zostały zgrupowane w jedną klasę `ExhibitSearchCriteria`.
-* **Korzyści:**
-  * **Czystość kodu (Clean Code):** Sygnatury metod pozostają krótkie i czytelne niezależnie od liczby filtrów.
-  * **Łatwa rozbudowa:** Dodanie nowego filtra (np. "data od") wymaga jedynie dodania pola w klasie kryteriów, bez łamania kompatybilności wstecznej metod w kontrolerach i serwisach.
-
-
+### Query Object
+* **Classes:** `ExhibitSearchCriteria`, `ExhibitController`, `ExhibitService`.
+* **Justification:** Instead of passing multiple individual parameters to service methods, search criteria are grouped into a single `ExhibitSearchCriteria` class.
+* **Benefits:**
+  * **Clean Code:** Method signatures remain short and readable regardless of the number of active filters.
+  * **Extensibility:** Adding a new filter (e.g., "date from") only requires adding a field to the criteria class, ensuring backward compatibility of methods in controllers and services.
 
 ---
 
-## 5. Wzorce Struktury Mapowania Obiektowo-Relacyjnego
+## 5. Object-Relational Mapping Structure Patterns
 
-### Identity Field (Pole Identyfikujące)
+### Identity Field
+* **Classes:** Fields marked with the `@Id` annotation (e.g., `Long id` in the `Exhibit` class).
+* **Justification:** Every persistent object has a unique identifier, allowing it to be distinguished from other instances.
+* **Benefits:**
+  * **Data Consistency:** Uniquely identifies a database row, which is critical for updates and maintaining relationships, even if the object's other data changes.
 
-* **Klasy:** Pola oznaczone adnotacją `@Id` (np. `Long id` w klasie `Exhibit`).
-* **Uzasadnienie:** Każdy obiekt trwały posiada unikalny identyfikator, pozwalający odróżnić go od innych instancji.
-* **Korzyści:**
-  * **Spójność danych:** Pozwala jednoznacznie zidentyfikować wiersz w bazie danych, co jest kluczowe przy aktualizacjach i relacjach, nawet jeśli inne dane obiektu ulegną zmianie.
-
-
-
-### Foreign Key Mapping (Mapowanie Klucza Obcego)
-
-* **Klasy:** Relacje `@ManyToOne` (np. w `Reservation` do `User`) oraz `@OneToMany`.
-* **Uzasadnienie:** Wzorzec ten odwzorowuje relacje między tabelami w bazie danych (klucze obce) na referencje między obiektami w języku Java.
-* **Korzyści:**
-  * **Intuicyjna nawigacja:** Umożliwia programiście poruszanie się po grafie obiektów w naturalny sposób (np. `reservation.getUser().getEmail()`) bez ręcznego pisania zapytań typu JOIN.
-
-
+### Foreign Key Mapping
+* **Classes:** `@ManyToOne` (e.g., in `Reservation` to `User`) and `@OneToMany` relationships.
+* **Justification:** This pattern maps database table relationships (foreign keys) to object references in Java.
+* **Benefits:**
+  * **Intuitive Navigation:** Allows developers to traverse the object graph naturally (e.g., `reservation.getUser().getEmail()`) without manually writing JOIN queries.
 
 ---
 
-## 6. Wzorce Podstawowe (Base Patterns)
+## 6. Base Patterns
 
-### Gateway (Brama)
+### Gateway
+* **Classes:** Frontend: Axios configuration / `exhibitService.ts`. Backend: `JpaRepository`.
+* **Justification:** An object that encapsulates access to an external system or resource (REST API or Database).
+* **Benefits:**
+  * **Complexity Hiding:** The client (e.g., a React component) doesn't need to know how to configure HTTP headers or handle network errors—it simply calls `getAll()`.
+  * **Easy Replacement:** If the API URL or authorization method changes, updates are made in only one place (the Gateway).
 
-* **Klasy:** Frontend: Konfiguracja Axios / `exhibitService.ts`. Backend: `JpaRepository`.
-* **Uzasadnienie:** Obiekt, który encapsuluje dostęp do zewnętrznego systemu lub zasobu (API REST lub Bazy Danych).
-* **Korzyści:**
-  * **Ukrycie złożoności:** Klient (np. komponent Reacta) nie musi wiedzieć, jak skonfigurować nagłówki HTTP czy obsłużyć błędy sieciowe – wywołuje prostą metodę `getAll()`.
-  * **Łatwa wymiana:** Jeśli zmieni się adres API lub sposób autoryzacji, zmiany wprowadzamy tylko w jednym miejscu (w Bramie), a nie w całej aplikacji.
-
-
-
-### Separated Interface (Wydzielony Interfejs)
-
-* **Klasy:** `JwtAuthenticationFilter`, `UserDetailsService` (Spring Security).
-* **Uzasadnienie:** Logika uwierzytelniania zależy od abstrakcyjnego interfejsu `UserDetailsService`, a nie od konkretnej implementacji klasy użytkownika.
-* **Korzyści:**
-  * **Luźne powiązania (Loose Coupling):** Implementacja ładowania użytkownika może zostać całkowicie wymieniona (np. z bazy SQL na usługę LDAP) bez konieczności zmiany ani jednej linijki kodu w filtrze uwierzytelniającym.
+### Separated Interface
+* **Classes:** `JwtAuthenticationFilter`, `UserDetailsService` (Spring Security).
+* **Justification:** Authentication logic depends on an abstract interface (`UserDetailsService`) rather than a concrete implementation of the User class.
+* **Benefits:**
+  * **Loose Coupling:** The implementation of user loading can be completely swapped out (e.g., from a SQL database to an LDAP service) without changing a single line of code in the authentication filter.
