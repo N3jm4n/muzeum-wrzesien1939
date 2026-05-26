@@ -17,10 +17,18 @@ services:
     dockerfilePath: ./Dockerfile
     plan: free
     envVars:
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: museum-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: museum-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: museum-db
+          property: database
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: museum-db
