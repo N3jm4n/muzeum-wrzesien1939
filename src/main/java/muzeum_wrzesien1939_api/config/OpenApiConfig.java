@@ -22,6 +22,9 @@ import org.springframework.context.annotation.Configuration;
                 title = "Museum System API",
                 version = "1.0"
         ),
+        servers = {
+                @Server(url = "/", description = "Default Server URL")
+        },
         security = {
                 @SecurityRequirement(
                         name = "bearerAuth"
