@@ -64,7 +64,7 @@ public class SecurityConfiguration {
 
         System.out.println(">>> CORS ALLOWED ORIGINS LOADED: " + allowedOrigins);
 
-        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
+        configuration.setAllowedOriginPatterns(List.of("*"));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
