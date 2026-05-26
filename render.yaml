@@ -9,14 +9,13 @@ databases:
 
 services:
   # ============================================
-  # Backend API (Spring Boot) - Prywatny serwis
+  # Backend API (Spring Boot) - Serwis Publiczny
   # ============================================
-  - type: pserv
+  - type: web # <-- ZMIANA: Z pserv na web
     name: museum-backend
     env: docker
     dockerfilePath: ./Dockerfile
     plan: free
-    healthCheckPath: /actuator/health
     envVars:
       - key: SPRING_DATASOURCE_URL
         fromDatabase:
@@ -31,7 +30,7 @@ services:
           name: museum-db
           property: password
       - key: JWT_SECRET_KEY
-        generateValue: true # Render wygeneruje bezpieczny losowy klucz!
+        generateValue: true
       - key: PORT
         value: "8080"
 
@@ -43,4 +42,10 @@ services:
     env: docker
     dockerfilePath: ./web/Dockerfile
     plan: free
-    envVars: []
+    envVars:
+      # <-- DODANO: Wstrzyknięcie adresu API do frontendu
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: museum-backend
+          envVarKey: RENDER_EXTERNAL_URL
