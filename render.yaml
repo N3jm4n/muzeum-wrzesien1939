@@ -1,0 +1,46 @@
+services:
+  # ============================================
+  # Baza Danych PostgreSQL
+  # ============================================
+  - type: psql
+    name: museum-db
+    databaseName: museum_db
+    user: admin
+    plan: free # Render oferuje darmową bazę na 90 dni, potem trzeba zmienić plan
+
+  # ============================================
+  # Backend API (Spring Boot) - Prywatny serwis
+  # ============================================
+  - type: pserv
+    name: museum-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: museum-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: museum-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: museum-db
+          property: password
+      - key: JWT_SECRET_KEY
+        generateValue: true # Render wygeneruje bezpieczny losowy klucz!
+      - key: PORT
+        value: "8080"
+
+  # ============================================
+  # Frontend (React + Vite + Nginx)
+  # ============================================
+  - type: web
+    name: museum-frontend
+    env: docker
+    dockerfilePath: ./web/Dockerfile
+    plan: free
+    envVars: []
