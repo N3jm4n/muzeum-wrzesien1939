@@ -1,0 +1,29 @@
+# Git
+.git
+.gitattributes
+
+# Gradle build output
+build/
+.gradle/
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# Frontend (has its own build context)
+web/node_modules/
+web/dist/
+
+# Docker
+.dockerignore
+docker-compose.yml
+.env
+.env.example
+
+# Docs
+docs/
+README.md
+LICENSE

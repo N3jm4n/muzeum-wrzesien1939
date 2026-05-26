@@ -40,7 +40,8 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/actuator/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/exhibits/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/exhibitions/**").permitAll()

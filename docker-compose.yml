@@ -1,31 +1,89 @@
-version: '3.8'
-
 services:
-  # --- Baza danych PostgreSQL ---
+  # ============================================
+  # Baza danych PostgreSQL
+  # ============================================
   museum-db:
     image: postgres:15-alpine
     container_name: museum_postgres
-    restart: always
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: museum_db
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin_password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - museum-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
-  # --- Panel graficzny pgAdmin (do podglądu bazy) ---
+  # ============================================
+  # Backend — Spring Boot API
+  # ============================================
+  museum-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: museum_backend
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://museum-db:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    ports:
+      - "8080:8080"
+    depends_on:
+      museum-db:
+        condition: service_healthy
+    networks:
+      - museum-network
+
+  # ============================================
+  # Frontend — React + Nginx
+  # ============================================
+  museum-frontend:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: museum_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      museum-backend:
+        condition: service_healthy
+    networks:
+      - museum-network
+
+  # ============================================
+  # pgAdmin (opcjonalny — uruchom z: docker compose --profile tools up pgadmin)
+  # ============================================
   pgadmin:
     image: dpage/pgadmin4
     container_name: museum_pgadmin
+    profiles:
+      - tools
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "5050:80"
     depends_on:
-      - museum-db
+      museum-db:
+        condition: service_healthy
+    networks:
+      - museum-network
 
 volumes:
   postgres_data:
+
+networks:
+  museum-network:
+    driver: bridge

@@ -1,0 +1,12 @@
+# Dependencies (reinstalled in container)
+node_modules/
+
+# Build output (rebuilt in container)
+dist/
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode/
