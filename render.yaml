@@ -1,13 +1,13 @@
-services:
+databases:
   # ============================================
   # Baza Danych PostgreSQL
   # ============================================
-  - type: psql
-    name: museum-db
+  - name: museum-db
     databaseName: museum_db
     user: admin
     plan: free # Render oferuje darmową bazę na 90 dni, potem trzeba zmienić plan
 
+services:
   # ============================================
   # Backend API (Spring Boot) - Prywatny serwis
   # ============================================
