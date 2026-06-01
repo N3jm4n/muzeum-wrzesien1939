@@ -34,7 +34,7 @@ public class ReservationService {
 
             slots.add(TimeSlotResponse.builder()
                     .time(currentTime)
-                    .isAvailable(!isTaken)
+                    .available(!isTaken)
                     .build());
 
             currentTime = currentTime.plusHours(1);

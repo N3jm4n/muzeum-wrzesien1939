@@ -132,10 +132,7 @@ const Booking: React.FC<BookingProps> = ({ user }) => {
                             ) : availableSlots.length > 0 ? (
                                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
                                     {availableSlots.map((slot) => {
-                                        // ZMIANA TUTAJ:
-                                        // Sprawdzamy 'available' zamiast 'isAvailable'
-                                        // Dodatkowo zabezpieczamy się: jeśli 'available' nie istnieje, spróbuj 'isAvailable'
-                                        const isTaken = !(slot.available ?? (slot as any).isAvailable);
+                                        const isTaken = !slot.available;
 
                                         return (
                                             <button

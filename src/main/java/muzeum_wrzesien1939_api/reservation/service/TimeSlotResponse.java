@@ -8,5 +8,5 @@ import java.time.LocalTime;
 @Builder
 public class TimeSlotResponse {
     private LocalTime time;
-    private boolean isAvailable;
+    private boolean available;
 }
