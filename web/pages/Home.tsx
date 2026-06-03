@@ -57,8 +57,8 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                         <div className="h-12 w-12 bg-museum-black text-white rounded-2xl flex items-center justify-center mb-6 group-hover:bg-museum-red transition-colors shadow-lg shadow-black/20">
                             <BookOpen size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">Interaktywny Katalog</h3>
-                        <p className="text-gray-600 leading-relaxed">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-3">Interaktywny Katalog</h2>
+                        <p className="text-gray-700 leading-relaxed">
                             Przeglądaj zbiory fizyczne i cyfrowe. Poznaj historię każdego przedmiotu dzięki szczegółowym opisom i modelom 3D.
                         </p>
                     </div>
@@ -66,8 +66,8 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                         <div className="h-12 w-12 bg-museum-black text-white rounded-2xl flex items-center justify-center mb-6 group-hover:bg-museum-red transition-colors shadow-lg shadow-black/20">
                             <Users size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">Wspólna Historia</h3>
-                        <p className="text-gray-600 leading-relaxed">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-3">Wspólna Historia</h2>
+                        <p className="text-gray-700 leading-relaxed">
                             Dołącz do społeczności. Podziel się rodzinnymi pamiątkami i pomóż nam ocalić historię od zapomnienia.
                         </p>
                     </div>
@@ -75,8 +75,8 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                         <div className="h-12 w-12 bg-museum-black text-white rounded-2xl flex items-center justify-center mb-6 group-hover:bg-museum-red transition-colors shadow-lg shadow-black/20">
                             <Calendar size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">Zaplanuj Wizytę</h3>
-                        <p className="text-gray-600 leading-relaxed">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-3">Zaplanuj Wizytę</h2>
+                        <p className="text-gray-700 leading-relaxed">
                             Zarezerwuj bilet online. Uniknij kolejek i skorzystaj z dedykowanych ścieżek edukacyjnych.
                         </p>
                     </div>
