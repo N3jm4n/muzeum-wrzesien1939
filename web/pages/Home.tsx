@@ -12,7 +12,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             <section className="relative h-screen w-full overflow-hidden bg-black">
                 <div className="absolute inset-0 opacity-50">
                     <img
-                        src="https://picsum.photos/seed/history/1920/1080"
+                        src="/assets/hero-bg.webp"
                         alt="Historical Background"
                         fetchPriority="high"
                         className="w-full h-full object-cover grayscale"
