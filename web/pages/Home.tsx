@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronRight, BookOpen, Users, Calendar } from 'lucide-react';
+import heroBg from '../assets/hero-bg.webp';
 
 interface HomeProps {
     onNavigate: (page: string) => void;
@@ -12,7 +13,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             <section className="relative h-screen w-full overflow-hidden bg-black">
                 <div className="absolute inset-0 opacity-50">
                     <img
-                        src="/assets/hero-bg.webp"
+                        src={heroBg}
                         alt="Historical Background"
                         fetchPriority="high"
                         className="w-full h-full object-cover grayscale"
