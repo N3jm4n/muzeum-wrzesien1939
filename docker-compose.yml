@@ -54,8 +54,6 @@ services:
       dockerfile: Dockerfile
     container_name: museum_frontend
     restart: unless-stopped
-    ports:
-      - "3000:80"
     depends_on:
       museum-backend:
         condition: service_healthy
@@ -81,9 +79,29 @@ services:
     networks:
       - museum-network
 
+  # ============================================
+  # Caddy — HTTPS Reverse Proxy
+  # ============================================
+  caddy:
+    image: caddy:2.8-alpine
+    container_name: museum_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - museum-frontend
+    networks:
+      - museum-network
+
 volumes:
   postgres_data:
-
+  caddy_data:
+  caddy_config:
 networks:
   museum-network:
     driver: bridge

@@ -1,0 +1,7 @@
+muzeumwrzesnia1939.pl, www.muzeumwrzesnia1939.pl {
+    # Reverse proxy to the Nginx frontend container
+    reverse_proxy museum-frontend:80
+
+    # Caddy will automatically manage Let's Encrypt SSL certs,
+    # redirect HTTP to HTTPS, and compress responses.
+}
