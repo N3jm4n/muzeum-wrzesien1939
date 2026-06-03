@@ -1,3 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --color-museum-red: #8B0000;
+  --color-museum-black: #1a1a1a;
+  --color-museum-paper: #f5f5f7;
+  --color-museum-gold: #C5A059;
+}
+
 /* Muzeum Wrzesień 1939 — Global Styles */
 
 body {

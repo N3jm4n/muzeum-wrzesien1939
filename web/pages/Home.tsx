@@ -14,6 +14,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                     <img
                         src="https://picsum.photos/seed/history/1920/1080"
                         alt="Historical Background"
+                        fetchPriority="high"
                         className="w-full h-full object-cover grayscale"
                     />
                 </div>
