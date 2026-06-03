@@ -104,7 +104,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage, onLogout
 
             {/* Mobile Toggle */}
             <div className="lg:hidden">
-              <button onClick={() => setIsMobileOpen(!isMobileOpen)} className={`p-2 transition ${textClass}`}>
+              <button aria-label="Przełącz menu" onClick={() => setIsMobileOpen(!isMobileOpen)} className={`p-2 transition ${textClass}`}>
                 {isMobileOpen ? <X /> : <Menu />}
               </button>
             </div>
