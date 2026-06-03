@@ -43,7 +43,7 @@ export const AdminReservations: React.FC = () => {
                             <tr>
                                 <th className="p-6 text-xs font-bold text-gray-500 uppercase">Godzina</th>
                                 <th className="p-6 text-xs font-bold text-gray-500 uppercase">Gość</th>
-                                <th className="p-6 text-xs font-bold text-gray-500 uppercase">Email</th>
+                                <th className="p-6 text-xs font-bold text-gray-500 uppercase">Email / Telefon</th>
                                 <th className="p-6 text-xs font-bold text-gray-500 uppercase text-center">Osób</th>
                             </tr>
                             </thead>
@@ -52,7 +52,10 @@ export const AdminReservations: React.FC = () => {
                                 <tr key={res.id} className="hover:bg-gray-50 transition">
                                     <td className="p-6 font-bold text-museum-red">{res.visitTime.slice(0, 5)}</td>
                                     <td className="p-6 font-medium text-gray-900">{res.firstName} {res.lastName}</td>
-                                    <td className="p-6 text-gray-500 text-sm">{res.userEmail}</td>
+                                    <td className="p-6 text-gray-500 text-sm">
+                                        <div>{res.userEmail}</div>
+                                        <div className="font-medium text-gray-700">{res.phoneNumber}</div>
+                                    </td>
                                     <td className="p-6 text-center"><span className="px-3 py-1 bg-gray-100 rounded-full font-bold text-sm text-gray-700">{res.numberOfGuests}</span></td>
                                 </tr>
                             ))}

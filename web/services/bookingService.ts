@@ -13,12 +13,14 @@ export interface ReservationEntry {
     firstName: string;
     lastName: string;
     userEmail: string;
+    phoneNumber: string;
 }
 
 export interface ReservationRequest {
     date: string;
     time: string;
     numberOfGuests: number;
+    phoneNumber: string;
 }
 
 export const bookingService = {

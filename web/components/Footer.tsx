@@ -13,21 +13,20 @@ const Footer: React.FC = () => {
         <div>
           <h4 className="font-bold mb-4">Godziny otwarcia</h4>
           <ul className="text-gray-400 text-sm space-y-2">
-            <li>Wtorek - Piątek: 10:00 - 18:00</li>
-            <li>Sobota - Niedziela: 10:00 - 16:00</li>
+            <li>Wtorek - Niedziela: 9:00 - 17:00</li>
             <li>Poniedziałek: Nieczynne</li>
           </ul>
         </div>
         <div>
           <h4 className="font-bold mb-4">Kontakt</h4>
           <ul className="text-gray-400 text-sm space-y-2">
-            <li>Brzozowa 24, 43-100 Tychy</li>
+            <li>Wyzwolenia 73A, 42-583 Bobrowniki</li>
             <li>adominiec@wp.pl</li>
           </ul>
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500">
-        &copy; {new Date().getFullYear()} Muzeum Września 1939 w Tychach. Wszelkie prawa zastrzeżone.
+        &copy; {new Date().getFullYear()} Muzeum Września 1939. Wszelkie prawa zastrzeżone.
       </div>
     </footer>
   );

@@ -10,8 +10,9 @@
   },
   "dependencies": {
     "@google/genai": "^1.34.0",
-    "axios": "^1.13.2",
+    "axios": "^1.17.0",
     "browser-image-compression": "^2.0.2",
+    "date-holidays": "^3.30.2",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.3",
@@ -23,8 +24,8 @@
     "@types/node": "^22.14.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.0.0",
+    "@vitejs/plugin-react": "^6.0.2",
     "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "vite": "^8.0.16"
   }
 }

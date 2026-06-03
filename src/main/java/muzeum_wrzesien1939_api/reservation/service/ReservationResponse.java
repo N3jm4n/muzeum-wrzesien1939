@@ -15,4 +15,5 @@ public class ReservationResponse {
     private String firstName;
     private String lastName;
     private String userEmail;
+    private String phoneNumber;
 }

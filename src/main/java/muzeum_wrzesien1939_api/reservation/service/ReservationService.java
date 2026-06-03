@@ -22,29 +22,31 @@ public class ReservationService {
     private final UserRepository userRepository;
 
     //TODO possibly make them adjustable for admin
-    private final LocalTime OPENING_TIME = LocalTime.of(10, 0);
-    private final LocalTime CLOSING_TIME = LocalTime.of(15, 0);
+    private final LocalTime OPENING_TIME = LocalTime.of(9, 30);
+    private final LocalTime CLOSING_TIME = LocalTime.of(15, 30);
 
     public List<TimeSlotResponse> getAvailableSlots(LocalDate date) {
         List<TimeSlotResponse> slots = new ArrayList<>();
         LocalTime currentTime = OPENING_TIME;
 
         while (!currentTime.isAfter(CLOSING_TIME)) {
-            boolean isTaken = reservationRepository.existsByVisitDateAndVisitTime(date, currentTime);
+            Integer guestsCount = reservationRepository.sumGuestsByVisitDateAndVisitTime(date, currentTime);
+            boolean isTaken = guestsCount != null && guestsCount >= 15;
 
             slots.add(TimeSlotResponse.builder()
                     .time(currentTime)
                     .available(!isTaken)
                     .build());
 
-            currentTime = currentTime.plusHours(1);
+            currentTime = currentTime.plusMinutes(90);
         }
         return slots;
     }
 
     public void makeReservation(ReservationRequest request) {
-        if (reservationRepository.existsByVisitDateAndVisitTime(request.getDate(), request.getTime())) {
-            throw new RuntimeException("This time slot is already booked!");
+        Integer guestsCount = reservationRepository.sumGuestsByVisitDateAndVisitTime(request.getDate(), request.getTime());
+        if (guestsCount != null && guestsCount >= 15) {
+            throw new RuntimeException("This time slot is already fully booked!");
         }
 
         String email = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
@@ -55,6 +57,7 @@ public class ReservationService {
                 .visitDate(request.getDate())
                 .visitTime(request.getTime())
                 .numberOfGuests(request.getNumberOfGuests())
+                .phoneNumber(request.getPhoneNumber())
                 .user(user)
                 .build();
 
@@ -87,6 +90,7 @@ public class ReservationService {
                 .firstName(reservation.getUser().getFirstName())
                 .lastName(reservation.getUser().getLastName())
                 .userEmail(reservation.getUser().getEmail())
+                .phoneNumber(reservation.getPhoneNumber())
                 .build();
     }
 }

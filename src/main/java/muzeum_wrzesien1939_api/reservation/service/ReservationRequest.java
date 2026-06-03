@@ -16,4 +16,5 @@ public class ReservationRequest {
     private LocalDate date;
     private LocalTime time;
     private int numberOfGuests;
+    private String phoneNumber;
 }
