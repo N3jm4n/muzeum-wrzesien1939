@@ -22,17 +22,18 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30"></div>
 
                 <div className="relative z-10 flex flex-col justify-center h-full max-w-7xl mx-auto px-4 sm:px-6">
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold leading-tight mb-6 animate-fade-in-up">
+                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-bold leading-tight mb-6 animate-fade-in-up">
                         <span className="text-white drop-shadow-lg">Wrzesień 1939</span> <br />
                         <span className="text-museum-red drop-shadow-md">
-              na Śląsku
-            </span>
+                            na Śląsku
+                        </span>
                     </h1>
-                    <p className="text-gray-300 text-lg md:text-xl max-w-xl mb-10 font-light leading-relaxed animate-fade-in-up delay-100">
-                        Odkryj historię heroicznej obrony. Zanurz się w interaktywnej opowieści o ludziach, którzy stanęli w obronie wolności.
+                    <p className="text-gray-200 text-base md:text-lg max-w-4xl mb-10 font-light leading-relaxed animate-fade-in-up delay-100 text-justify">
+                        <strong className="text-white font-medium block mb-2 text-xl md:text-2xl">Odkryj historię na nowo...</strong>
+                        Muzeum Śląskiego Września 1939 zlokalizowane jest w przedwojennych koszarach. Dzięki realistycznym scenografiom oraz dioramom można poczuć klimat życia żołnierzy Wojska Polskiego z okresu II RP. To nie tylko lekcja historii – to fascynująca podróż w czasie, która zachwyci zarówno pasjonatów militariów, jak i&nbsp;całe rodziny szukające wyjątkowej atrakcji turystycznej.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-200 mb-8">
-                        {}
+                        { }
                         <button
                             onClick={() => onNavigate('catalog')}
                             className="px-8 py-4 bg-museum-red text-white rounded-full font-medium hover:bg-red-800 transition shadow-lg hover:shadow-red-900/30 flex items-center justify-center gap-2 transform hover:-translate-y-1"
@@ -52,7 +53,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             {/* Intro Grid */}
             <section className="py-24 bg-white">
                 <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12">
-                    {}
+                    { }
                     <div className="p-8 rounded-3xl bg-gray-50 hover:bg-gray-100 transition duration-500 group">
                         <div className="h-12 w-12 bg-museum-black text-white rounded-2xl flex items-center justify-center mb-6 group-hover:bg-museum-red transition-colors shadow-lg shadow-black/20">
                             <BookOpen size={24} />

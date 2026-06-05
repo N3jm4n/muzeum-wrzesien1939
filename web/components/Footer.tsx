@@ -1,4 +1,5 @@
 import React from 'react';
+import { MapPin, Phone, Mail } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -7,21 +8,37 @@ const Footer: React.FC = () => {
         <div>
           <h3 className="font-serif text-xl mb-4 text-museum-red">Muzeum Września 1939</h3>
           <p className="text-gray-400 text-sm leading-relaxed">
-            Upamiętniamy heroiczną walkę żołnierzy Wojska Polskiego i ludności cywilnej na Śląsku we wrześniu 1939 roku.
+            Upamiętniamy bohaterską walkę żołnierzy Wojska Polskiego na Śląsku we wrześniu 1939 roku.
           </p>
         </div>
         <div>
           <h4 className="font-bold mb-4">Godziny otwarcia</h4>
-          <ul className="text-gray-400 text-sm space-y-2">
-            <li>Wtorek - Niedziela: 9:00 - 17:00</li>
-            <li>Poniedziałek: Nieczynne</li>
+          <ul className="text-gray-400 text-sm space-y-3">
+            <li className="flex justify-between items-center">
+              <span>Wtorek - Niedziela</span>
+              <span className="text-museum-red font-medium">9:00 - 17:00</span>
+            </li>
+            <li className="flex justify-between items-center">
+              <span>Poniedziałek</span>
+              <span className="text-gray-500">Nieczynne</span>
+            </li>
           </ul>
         </div>
         <div>
           <h4 className="font-bold mb-4">Kontakt</h4>
-          <ul className="text-gray-400 text-sm space-y-2">
-            <li>Wyzwolenia 73A, 42-583 Bobrowniki</li>
-            <li>adominiec@wp.pl</li>
+          <ul className="text-gray-400 text-sm space-y-3">
+            <li className="flex items-start gap-2">
+              <MapPin size={16} className="text-museum-red mt-0.5 shrink-0" />
+              <span>Wyzwolenia 73A, 42-583 Bobrowniki</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <Phone size={16} className="text-museum-red shrink-0" />
+              <span>+48 506 196 338</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <Mail size={16} className="text-museum-red shrink-0" />
+              <span>adominiec@wp.pl</span>
+            </li>
           </ul>
         </div>
       </div>
