@@ -47,6 +47,28 @@ public class ReservationController {
         return ResponseEntity.ok(service.getReservationsForDate(date));
     }
 
+    @Operation(summary = "Get reservations by month", description = "Returns a list of reservations for a specific month (ADMIN only).")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/by-month")
+    public ResponseEntity<List<ReservationResponse>> getReservationsByMonth(
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+        return ResponseEntity.ok(service.getReservationsForDateRange(startDate, endDate));
+    }
+
+    @Operation(summary = "Get reservations by date range", description = "Returns a list of reservations for a specific date range (ADMIN only).")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/by-range")
+    public ResponseEntity<List<ReservationResponse>> getReservationsByRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
+    ) {
+        return ResponseEntity.ok(service.getReservationsForDateRange(start, end));
+    }
+
     @Operation(summary = "Get my reservations", description = "Returns reservation history for the logged-in user.")
     @GetMapping("/my")
     public ResponseEntity<List<ReservationResponse>> getMyReservations() {

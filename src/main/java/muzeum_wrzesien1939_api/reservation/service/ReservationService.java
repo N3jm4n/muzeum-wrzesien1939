@@ -71,6 +71,13 @@ public class ReservationService {
                 .toList();
     }
 
+    public List<ReservationResponse> getReservationsForDateRange(LocalDate startDate, LocalDate endDate) {
+        return reservationRepository.findAllByVisitDateBetween(startDate, endDate)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
     public List<ReservationResponse> getMyReservations() {
         String email = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByEmail(email).orElseThrow();

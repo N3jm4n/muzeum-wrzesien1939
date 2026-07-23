@@ -47,5 +47,19 @@ export const bookingService = {
             params: { date }
         });
         return response.data;
+    },
+
+    getByMonth: async (year: number, month: number): Promise<ReservationEntry[]> => {
+        const response = await api.get<ReservationEntry[]>('/reservations/by-month', {
+            params: { year, month }
+        });
+        return response.data;
+    },
+
+    getByRange: async (start: string, end: string): Promise<ReservationEntry[]> => {
+        const response = await api.get<ReservationEntry[]>('/reservations/by-range', {
+            params: { start, end }
+        });
+        return response.data;
     }
 };
