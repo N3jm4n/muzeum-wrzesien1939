@@ -25,7 +25,7 @@ public class Donation {
     @Column(nullable = false)
     private String itemName;
 
-    @Column(length = 2000)
+    @Column(length = 5000)
     private String description;
 
     //TODO maybe use binary image data

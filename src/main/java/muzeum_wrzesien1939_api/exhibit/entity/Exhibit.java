@@ -21,7 +21,7 @@ public class Exhibit {
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 2000)
+    @Column(length = 5000)
     private String description;
 
     //TODO think whether String or int would be better
